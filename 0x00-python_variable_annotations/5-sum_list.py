@@ -3,9 +3,10 @@
 sum_list - take a list of flaots
 return sum of them (float)
 """
+from typing import List
 
 
-def sum_list(input_list: list[float]) -> float:
+def sum_list(input_list: List[float]) -> float:
     """
     input_list - list of float
     return float
