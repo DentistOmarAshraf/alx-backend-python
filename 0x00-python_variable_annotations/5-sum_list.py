@@ -11,8 +11,8 @@ def sum_list(input_list: list[float]) -> float:
     return float
     """
     to_ret: float = 0.0
-    
+
     for elem in input_list:
         to_ret += elem
-    
+
     return to_ret
