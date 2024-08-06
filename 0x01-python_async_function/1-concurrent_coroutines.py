@@ -14,8 +14,12 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     n - (int) loop limit
     max_delay: (int)
     """
-    list_return = []
+    delays: List[float] = []
+    all_delays: List[float] = []
     for _ in range(n):
-        list_return.append(await wait_random(max_delay))
-
-    return list_return.sort()
+        delays.append(wait_random(max_delay))
+    for delay in asyncio.as_completed(delays):
+        result = await delay
+        all_delays.append(result)
+    
+    return all_delays.sort()
