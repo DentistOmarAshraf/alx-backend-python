@@ -5,9 +5,10 @@ Asyncio
 
 import asyncio
 import random
+from typing import Union
 
 
-async def wait_random(max_delay=10):
+async def wait_random(max_delay: int = 10) -> Union[int, float]:
     """
     max_delay - (int) random to choose from 0 to max_delay
     """
