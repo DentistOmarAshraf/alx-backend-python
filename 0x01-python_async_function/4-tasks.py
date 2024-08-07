@@ -15,7 +15,7 @@ async def task_wait_n(n: int, max_delay: int) -> List[float]:
     max_delay: (int)
     """
     coroutines: list[Awaitable] = [task_wait_random(max_delay)
-                                  for _ in range(n)]
+                                   for _ in range(n)]
     to_ret: list[float] = []
     for future in asyncio.as_completed(coroutines):
         to_ret.append(await future)
