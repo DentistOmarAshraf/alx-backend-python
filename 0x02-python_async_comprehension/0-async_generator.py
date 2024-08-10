@@ -3,16 +3,16 @@
 Async generator
 """
 
-import asyncio
 import random
-from typing import AsyncGenerator
+from typing import Generator
+import time
 
 
-async def async_generator() -> AsyncGenerator[float, None]:
+def async_generator() -> Generator[float, None, None]:
     """
     AsyncIO Generator
     """
     for _ in range(10):
         num: float = random.uniform(0, 10)
-        await asyncio.sleep(1)
+        time.sleep(1)
         yield num
