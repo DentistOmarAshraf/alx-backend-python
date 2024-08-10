@@ -5,6 +5,7 @@ AsyncIO comperhension
 
 import asyncio
 import time
+from typing import List, Generator
 
 
 async_comprehension = __import__('1-async_comprehension').async_comprehension
@@ -15,7 +16,8 @@ async def measure_runtime() -> float:
     meassure time of four async comperhension
     """
     start: float = time.time()
-    await asyncio.gather(async_comprehension(), async_comprehension(),
-                         async_comprehension(), async_comprehension())
+    tasks: List[Generator] = [async_comprehension() for _ in range(4)]
+    await asyncio.gather(*tasks)
     end: float = time.time()
-    return end - start
+    elapsed_time: float = end - start
+    return elapsed_time
