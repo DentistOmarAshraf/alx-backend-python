@@ -3,8 +3,9 @@
 utils testing
 """
 import unittest
+from unittest.mock import patch, MagicMock
 from parameterized import parameterized
-from utils import access_nested_map
+from utils import access_nested_map, get_json
 from typing import Mapping, Sequence, Any
 
 
@@ -32,6 +33,32 @@ class TestAccessNestedMap(unittest.TestCase):
                                          path: Sequence) -> Any:
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """
+    Testing get_json
+    """
+
+    def mock_get(self, url: str):
+        mock_response = MagicMock()
+        if url == "http://example.com":
+            mock_response.json.return_value = {"payload": True}
+        if url == "http://holberton.io":
+            mock_response.json.return_value = {"payload": False}
+        return mock_response
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    @patch('utils.requests')
+    def test_get_json(self,
+                      url: str,
+                      output: dict,
+                      mock_request: MagicMock):
+        mock_request.get.side_effect = self.mock_get
+        self.assertEqual(get_json(url), output)
 
 
 if __name__ == "__main__":
