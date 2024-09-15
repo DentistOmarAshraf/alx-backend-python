@@ -5,7 +5,7 @@ utils testing
 import unittest
 from parameterized import parameterized
 from utils import access_nested_map
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, Any
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map(self,
                                nested_map: Mapping,
                                path: Sequence,
-                               output: Mapping | int) -> None:
+                               output: Any) -> None:
         self.assertEqual(access_nested_map(nested_map, path), output)
 
 
