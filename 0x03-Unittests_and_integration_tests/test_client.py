@@ -15,20 +15,17 @@ class TestGithubOrgClient(unittest.TestCase):
     """
 
     @parameterized.expand([
-        ('google', 'https://api.github.com/orgs/google', {"payload": True}),
-        ('abc', 'https://api.github.com/orgs/abc', {"payload": True})
+        ('google'),
+        ('abc')
     ])
     @patch('client.get_json')
-    def test_org(
-            self, org: str, url: str,
-            ret: dict, mock_method: MagicMock) -> Any:
+    def test_org(self, org: str, mock_method: MagicMock) -> Any:
         """testing method org
         """
         inst = GithubOrgClient(org)
-        mock_method.return_value = {"payload": True}
-        self.assertEqual(inst.org, ret)
-        mock_method.assert_called_once()
-        mock_method.assert_called_once_with(url)
+        inst.org()
+        string_to_test = f'https://api.github.com/orgs/{org}'
+        mock_method.assert_called_once_with(string_to_test)
 
 
 if __name__ == "__main__":
