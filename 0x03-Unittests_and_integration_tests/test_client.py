@@ -13,24 +13,22 @@ class TestGithubOrgClient(unittest.TestCase):
     testing GithubOrgClient class
     """
 
-    def mock_get(self, url: str):
+    def mock_get_json(self, url: str):
         """mocking response object
         """
-        mock_response = MagicMock()
-        mock_response.json.return_value = None
-        return mock_response
+        return {"test": "value"}
 
     @parameterized.expand([
-        ('google', 'https://api.github.com/orgs/google'),
-        ('abc', 'https://api.github.com/orgs/abc')
+        ('google', 'https://api.github.com/orgs/google', {"test":"value"}),
+        ('abc', 'https://api.github.com/orgs/abc', {"test":"value"})
     ])
     @patch('client.get_json')
-    def test_org(self, org: str, url: str, mock_method: MagicMock):
+    def test_org(self, org: str, url: str, ret: dict, mock_method: MagicMock):
         """testing method org
         """
         inst = GithubOrgClient(org)
-        inst.org
-        inst.org
+        mock_method.side_effect = self.mock_get_json
+        self.assertEqual(inst.org, ret)
         mock_method.assert_called_once_with(url)
 
 
