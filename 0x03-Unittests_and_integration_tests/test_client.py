@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from parameterized import parameterized
 from client import GithubOrgClient
+from typing import Any, Dict
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -13,22 +14,20 @@ class TestGithubOrgClient(unittest.TestCase):
     testing GithubOrgClient class
     """
 
-    def mock_get_json(self, url: str):
-        """mocking response object
-        """
-        return {"test": "value"}
-
     @parameterized.expand([
-        ('google', 'https://api.github.com/orgs/google', {"test":"value"}),
-        ('abc', 'https://api.github.com/orgs/abc', {"test":"value"})
+        ('google', 'https://api.github.com/orgs/google', {"payload": True}),
+        ('abc', 'https://api.github.com/orgs/abc', {"payload": True})
     ])
     @patch('client.get_json')
-    def test_org(self, org: str, url: str, ret: dict, mock_method: MagicMock):
+    def test_org(
+            self, org: str, url: str,
+            ret: dict, mock_method: MagicMock) -> Any:
         """testing method org
         """
         inst = GithubOrgClient(org)
-        mock_method.side_effect = self.mock_get_json
+        mock_method.return_value = {"payload": True}
         self.assertEqual(inst.org, ret)
+        mock_method.assert_called_once()
         mock_method.assert_called_once_with(url)
 
 
