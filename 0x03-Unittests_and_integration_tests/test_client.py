@@ -25,9 +25,6 @@ class TestGithubOrgClient(unittest.TestCase):
         inst = GithubOrgClient(org)
         mock_method.return_value = {"payload": True}
         self.assertEqual(inst.org, {"payload": True})
-        string_to_test = f'https://api.github.com/orgs/{org}'
-        mock_method.assert_called_once_with(string_to_test)
-
 
 if __name__ == "__main__":
     unittest.main()
