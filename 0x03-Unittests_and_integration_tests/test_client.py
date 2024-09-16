@@ -31,7 +31,6 @@ class TestGithubOrgClient(unittest.TestCase):
         inst = GithubOrgClient(org)
         inst.org
         inst.org
-        mock_method.assert_called_once()
         mock_method.assert_called_once_with(url)
 
 
