@@ -23,6 +23,8 @@ class TestAccessNestedMap(unittest.TestCase):
                                nested_map: Mapping,
                                path: Sequence,
                                output: Any) -> None:
+        """testing access_nested_map Returns
+        """
         self.assertEqual(access_nested_map(nested_map, path), output)
 
     @parameterized.expand([
@@ -32,6 +34,8 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map_exception(self,
                                          nested_map: Mapping,
                                          path: Sequence) -> Any:
+        """testing access_nested_map Exceptions
+        """
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
 
@@ -42,6 +46,9 @@ class TestGetJson(unittest.TestCase):
     """
 
     def mock_get(self, url: str):
+        """Mocking requests.get method
+           to use it as side_effect
+        """
         mock_response = MagicMock()
         if url == "http://example.com":
             mock_response.json.return_value = {"payload": True}
@@ -58,6 +65,8 @@ class TestGetJson(unittest.TestCase):
                       url: str,
                       output: dict,
                       mock_request: MagicMock):
+        """testing get_json used request.get
+        """
         mock_request.get.side_effect = self.mock_get
         self.assertEqual(get_json(url), output)
 
@@ -68,6 +77,8 @@ class TestMemoize(unittest.TestCase):
     """
 
     def test_memoize(self):
+        """testing memoize decarator
+        """
         class TestClass:
             """
             test class
@@ -80,9 +91,9 @@ class TestMemoize(unittest.TestCase):
             def a_property(self):
                 return self.a_method
         with patch.object(
-                        TestClass,
-                        'a_method',
-                        return_value=None) as mock_method:
+            TestClass,
+            'a_method',
+                return_value=None) as mock_method:
             mock_inst = TestClass()
             mock_inst.a_method()
         mock_method.assert_called_once()
