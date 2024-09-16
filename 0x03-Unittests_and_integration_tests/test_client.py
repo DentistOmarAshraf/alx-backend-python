@@ -23,8 +23,8 @@ class TestGithubOrgClient(unittest.TestCase):
         """testing method org
         """
         inst = GithubOrgClient(org)
-        mock_method.return_value = org
-        self.assertEqual(inst.org, inst._org_name)
+        mock_method.return_value = {"payload": True}
+        self.assertEqual(inst.org, {"payload": True})
         string_to_test = f'https://api.github.com/orgs/{org}'
         mock_method.assert_called_once_with(string_to_test)
 
