@@ -34,6 +34,8 @@ class TestGithubOrgClient(unittest.TestCase):
     ])
     @patch.object(GithubOrgClient, 'org', new_callable=PropertyMock)
     def test_public_repos_url(self, org_tst: str, mock_prop: MagicMock):
+        """test public repos url
+        """
         mock_prop.return_value = {"repos_url": True}
         inst = GithubOrgClient(org_tst)
         self.assertEqual(inst.org["repos_url"], inst._public_repos_url)
@@ -46,13 +48,16 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch.object(GithubOrgClient, '_public_repos_url',
                   new_callable=PropertyMock)
     def test_public_repos(self, org, m_public_repos_url, m_get_json):
-        """testing _public_repos_url
+        """testing _public_repos
         """
-        m_get_json.return_value = {"payload": True}
-        m_public_repos_url.return_value = {"payload": True}
+        json_payload = [{"name": "oamr"}, {"name": "nada"}]
+        m_get_json.return_value = json_payload
+        m_public_repos_url.return_value = "http:req"
+        to_check = [x["name"] for x in json_payload]
         inst = GithubOrgClient(org)
-        self.assertEqual(inst.org, inst._public_repos_url)
+        self.assertEqual(inst.public_repos(), to_check)
         m_get_json.assert_called_once()
+        m_public_repos_url.assert_called_once()
 
 
 if __name__ == "__main__":
