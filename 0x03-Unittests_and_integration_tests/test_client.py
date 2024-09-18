@@ -4,9 +4,10 @@ client testing
 """
 import unittest
 from unittest.mock import patch, MagicMock, PropertyMock
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from typing import Any, Dict
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -71,5 +72,47 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(check, ret_bool)
 
 
+@parameterized_class(('org_payload', 'repos_payload',
+                      'expected_repos', 'apache2_repos'),
+                     TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration Test
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """setting up get_patcher
+           patching request.get
+        """
+        cls.get_patcher = patch('utils.requests.get')
+        cls.mock_get = cls.get_patcher.start()
+
+        def get_side_effect(url):
+            response_mock = MagicMock()
+            if url == "https://api.github.com/orgs/google":
+                response_mock.json.return_value = cls.org_payload
+            if url == "https://api.github.com/orgs/google/repos":
+                response_mock.json.return_value = cls.repos_payload
+            return response_mock
+        cls.mock_get.side_effect = get_side_effect
+
+    def test_one(self):
+        """Testing public_repo method
+        """
+        inst = GithubOrgClient('google')
+        self.assertEqual(inst.public_repos(), self.expected_repos)
+        self.assertEqual(inst.public_repos("apache-2.0"), self.apache2_repos)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Tear down patcher
+        """
+        cls.get_patcher.stop()
+
+
 if __name__ == "__main__":
+    """
+    Main
+    """
     unittest.main()
