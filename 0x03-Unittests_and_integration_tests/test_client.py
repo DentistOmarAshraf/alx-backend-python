@@ -97,11 +97,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             return response_mock
         cls.get_mock.side_effect = get_side_effect
 
-    def test_one(self):
+    def test_public_repos(self):
         """Testing public_repo method
         """
         inst = GithubOrgClient('google')
         self.assertEqual(inst.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        inst = GithubOrgClient('google')
         self.assertEqual(inst.public_repos("apache-2.0"), self.apache2_repos)
 
     @classmethod
