@@ -101,11 +101,19 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """Testing public_repo method
         """
         inst = GithubOrgClient('google')
+        self.assertEqual(inst.org, self.org_payload)
+        self.assertEqual(inst.repos_payload, self.repos_payload)
         self.assertEqual(inst.public_repos(), self.expected_repos)
+        self.get_mock.assert_called()
 
     def test_public_repos_with_license(self):
+        """Testing public_repo method
+        """
         inst = GithubOrgClient('google')
         self.assertEqual(inst.public_repos("apache-2.0"), self.apache2_repos)
+        self.assertEqual(inst.public_repos(), self.expected_repos)
+        self.assertEqual(inst.public_repos("some"), [])
+        self.get_mock.assert_called()
 
     @classmethod
     def tearDownClass(cls):
