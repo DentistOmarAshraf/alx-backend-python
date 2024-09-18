@@ -85,8 +85,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """setting up get_patcher
            patching request.get
         """
-        cls.get_patcher = patch('utils.requests.get')
-        cls.get_patcher = cls.get_patcher.start()
+        cls.get_patcher = patch('requests.get')
+        cls.get_mock = cls.get_patcher.start()
 
         def get_side_effect(url):
             response_mock = MagicMock()
@@ -95,7 +95,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             if url == "https://api.github.com/orgs/google/repos":
                 response_mock.json.return_value = cls.repos_payload
             return response_mock
-        cls.get_patcher.side_effect = get_side_effect
+        cls.get_mock.side_effect = get_side_effect
 
     def test_one(self):
         """Testing public_repo method
